@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Runearth.Lib.DomainModel
 {
@@ -16,6 +13,6 @@ namespace Runearth.Lib.DomainModel
 
         public DateTime? StartDateTime => TrackPoints.Count == 0 ? null : new DateTime?(TrackPoints[0].DateTime);
 
-        public DateTime? StopDateTime => TrackPoints.Count == 0 ? null : new DateTime?(TrackPoints[TrackPoints.Count-1].DateTime);
+        public DateTime? StopDateTime => TrackPoints.Count == 0 ? null : new DateTime?(TrackPoints[TrackPoints.Count - 1].DateTime);
     }
 }

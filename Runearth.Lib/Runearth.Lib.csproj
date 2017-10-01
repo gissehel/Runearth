@@ -51,6 +51,7 @@
     <Compile Include="Service\GpxReader.cs" />
     <Compile Include="Service\GpxToKmlConverter.cs" />
     <Compile Include="Service\KmlWriter.cs" />
+    <Compile Include="Utils\XmlNodeExtension.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

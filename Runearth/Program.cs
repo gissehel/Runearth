@@ -3,9 +3,9 @@ using Runearth.Lib.Service;
 
 namespace Runearth
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             IGpxReader gpxReader = new GpxReader();
             IKmlWriter kmlWriter = new KmlWriter();
