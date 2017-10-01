@@ -10,5 +10,10 @@ namespace Runearth.Lib.DomainModel
         }
 
         public List<ActivityFolderItem> Items { get; private set; } = new List<ActivityFolderItem>();
+
+        public void AddItem(ActivityFolderItem item)
+        {
+            Items.Add(item);
+        }
     }
 }

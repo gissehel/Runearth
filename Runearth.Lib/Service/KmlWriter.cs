@@ -2,7 +2,7 @@
 using Runearth.Lib.DomainModel;
 using Runearth.Lib.Utils;
 using System.Globalization;
-using System.Text;
+using System.Linq;
 using System.Xml;
 
 namespace Runearth.Lib.Service
@@ -52,15 +52,16 @@ namespace Runearth.Lib.Service
             return placemarkNode;
         }
 
-        private string GetCoordinatesText(Activity activity)
-        {
-            var resultBuilder = new StringBuilder();
-            foreach (var trackPoint in activity.TrackPoints)
-            {
-                resultBuilder.Append(string.Format(CultureInfo.InvariantCulture, "{0},{1},{2} ", trackPoint.Lon, trackPoint.Lat, trackPoint.Elevation));
-            }
-            return resultBuilder.ToString().Trim(' ');
-        }
+        private string GetCoordinatesText(Activity activity) => string.Join(" ", activity.TrackPoints.Select(GetCoordinatesText));
+
+        private string GetCoordinatesText(TrackPoint trackPoint) => string.Format
+            (
+                CultureInfo.InvariantCulture,
+                "{0},{1},{2}",
+                trackPoint.Lon,
+                trackPoint.Lat,
+                trackPoint.Elevation
+            );
 
         private XmlNode GetFolderOrPlacemarkNode(XmlDocument document, ActivityFolderItem item)
         {

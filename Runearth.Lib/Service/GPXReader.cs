@@ -54,7 +54,13 @@ namespace Runearth.Lib.Service
                 }
                 if (activity.StartDateTime.HasValue)
                 {
-                    activity.Name = string.Format("{0} - {1} ({2})", activity.StartDateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"), activity.StopDateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"), activity.ActivityType);
+                    activity.Name = string.Format
+                        (
+                            "{0} - {1} ({2})",
+                            activity.StartDateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                            activity.StopDateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                            activity.ActivityType
+                        );
                 }
             }
 

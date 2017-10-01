@@ -1,6 +1,5 @@
 ﻿using Runearth.Lib.Core.Service;
 using Runearth.Lib.DomainModel;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -29,23 +28,24 @@ namespace Runearth.Lib.Service
             {
                 if (filename.EndsWith(".gpx"))
                 {
-                    // Console.WriteLine(filename);
                     var activity = GpxReader.Read(filename);
                     if (activity != null)
                     {
                         var monthId = GetMonthId(activity);
-                        if (!subFolders.ContainsKey(monthId))
+                        if (monthId != null)
                         {
-                            subFolders[monthId] = new ActivityFolder(monthId);
+                            if (!subFolders.ContainsKey(monthId))
+                            {
+                                subFolders[monthId] = new ActivityFolder(monthId);
+                            }
+                            subFolders[monthId].AddItem(activity);
                         }
-                        subFolders[monthId].Items.Add(activity);
-                        Console.WriteLine(activity);
                     }
                 }
             }
             foreach (var activityFolderName in subFolders.Keys.OrderBy(x => x))
             {
-                folder.Items.Add(subFolders[activityFolderName]);
+                folder.AddItem(subFolders[activityFolderName]);
             }
             KmlWriter.Write(kmlFilename, folder);
         }
