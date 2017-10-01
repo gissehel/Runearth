@@ -1,4 +1,8 @@
-﻿using System.Xml;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Xml;
 
 namespace Runearth.Lib.Utils
 {
@@ -56,6 +60,31 @@ namespace Runearth.Lib.Utils
             var newNode = self.GetDocument().CreateElement(prefix, localName, namespaceURI);
             self.AppendChild(newNode);
             return newNode;
+        }
+
+        public static string ReadAttribute(this XmlNode self, string attributeName)
+        {
+            return self.Attributes[attributeName].Value;
+        }
+
+        public static double ReadAttributeAsDouble(this XmlNode self, string attributeName)
+        {
+            return Convert.ToDouble(self.ReadAttribute(attributeName), CultureInfo.InvariantCulture);
+        }
+
+        public static double GetInnerTextAsDouble(this XmlNode self)
+        {
+            return Convert.ToDouble(self.InnerText, CultureInfo.InvariantCulture);
+        }
+
+        public static DateTime GetInnerTextAsDateTime(this XmlNode self)
+        {
+            return Convert.ToDateTime(self.InnerText, CultureInfo.InvariantCulture);
+        }
+
+        public static IEnumerable<XmlNode> GetChildsByName(this XmlNode self, string elementName)
+        {
+            return self.ChildNodes.Cast<XmlNode>().Where(node => node.Name == elementName);
         }
     }
 }

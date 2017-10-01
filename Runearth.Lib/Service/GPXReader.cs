@@ -1,7 +1,6 @@
 ﻿using Runearth.Lib.Core.Service;
 using Runearth.Lib.DomainModel;
-using System;
-using System.Globalization;
+using Runearth.Lib.Utils;
 using System.Linq;
 using System.Xml;
 
@@ -19,7 +18,6 @@ namespace Runearth.Lib.Service
             {
                 var index = filename.LastIndexOf(".gpx");
                 var filenameParts = filename.Substring(0, index).Split(' ');
-                // Console.WriteLine(filenameParts.Length);
                 if (filenameParts.Length == 4)
                 {
                     activity.ActivityType = filenameParts[3];
@@ -37,21 +35,19 @@ namespace Runearth.Lib.Service
                 if (trackPointNode != null)
                 {
                     var trackPoint = new TrackPoint();
-                    var lon = trackPointNode.Attributes["lon"].Value;
-                    var lat = trackPointNode.Attributes["lat"].Value;
-                    trackPoint.Lon = Convert.ToDouble(lon, CultureInfo.InvariantCulture);
-                    trackPoint.Lat = Convert.ToDouble(lat, CultureInfo.InvariantCulture);
+                    trackPoint.Lon = trackPointNode.ReadAttributeAsDouble("lon");
+                    trackPoint.Lat = trackPointNode.ReadAttributeAsDouble("lat");
 
-                    var eleNode = trackPointNode.ChildNodes.Cast<XmlNode>().Where(n => n.Name == "ele").FirstOrDefault();
+                    var eleNode = trackPointNode.GetChildsByName("ele").FirstOrDefault();
                     if (eleNode != null)
                     {
-                        trackPoint.Elevation = Convert.ToDouble(eleNode.InnerText, CultureInfo.InvariantCulture);
+                        trackPoint.Elevation = eleNode.GetInnerTextAsDouble();
                     }
 
-                    var timeNode = trackPointNode.ChildNodes.Cast<XmlNode>().Where(n => n.Name == "time").FirstOrDefault();
+                    var timeNode = trackPointNode.GetChildsByName("time").FirstOrDefault();
                     if (timeNode != null)
                     {
-                        trackPoint.DateTime = Convert.ToDateTime(timeNode.InnerText, CultureInfo.InvariantCulture);
+                        trackPoint.DateTime = timeNode.GetInnerTextAsDateTime();
                     }
 
                     activity.TrackPoints.Add(trackPoint);
