@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CommandLine, Version=1.9.71.2, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,19 +43,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Service\ICommandLineParserService.cs" />
     <Compile Include="Core\Service\IGpxReader.cs" />
     <Compile Include="Core\Service\IGpxToKmlConverter.cs" />
     <Compile Include="Core\Service\IKmlWriter.cs" />
     <Compile Include="DomainModel\Activity.cs" />
     <Compile Include="DomainModel\ActivityFolder.cs" />
     <Compile Include="DomainModel\ActivityFolderItem.cs" />
+    <Compile Include="DomainModel\Configuration.cs" />
     <Compile Include="DomainModel\TrackPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\CommandLineParserService.cs" />
     <Compile Include="Service\GpxReader.cs" />
     <Compile Include="Service\GpxToKmlConverter.cs" />
     <Compile Include="Service\KmlWriter.cs" />
     <Compile Include="Utils\XmlNodeExtension.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

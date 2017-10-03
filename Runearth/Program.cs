@@ -9,9 +9,10 @@ namespace Runearth
         {
             IGpxReader gpxReader = new GpxReader();
             IKmlWriter kmlWriter = new KmlWriter();
-            IGpxToKmlConverter gpxToKmlConverter = new GpxToKmlConverter(gpxReader, kmlWriter);
+            ICommandLineParserService commandLineParserService = new CommandLineParserService();
+            IGpxToKmlConverter gpxToKmlConverter = new GpxToKmlConverter(commandLineParserService, gpxReader, kmlWriter);
 
-            gpxToKmlConverter.Convert(args[0], args[1]);
+            gpxToKmlConverter.Run(args);
         }
     }
 }

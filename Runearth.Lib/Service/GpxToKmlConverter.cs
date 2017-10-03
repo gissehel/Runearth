@@ -9,19 +9,21 @@ namespace Runearth.Lib.Service
 {
     public class GpxToKmlConverter : IGpxToKmlConverter
     {
+        private ICommandLineParserService CommandLineParserService { get; set; }
         private IGpxReader GpxReader { get; set; }
 
         private IKmlWriter KmlWriter { get; set; }
 
-        public GpxToKmlConverter(IGpxReader gpxReader, IKmlWriter kmlWriter)
+        public GpxToKmlConverter(ICommandLineParserService commandLineParserService, IGpxReader gpxReader, IKmlWriter kmlWriter)
         {
+            CommandLineParserService = commandLineParserService;
             GpxReader = gpxReader;
             KmlWriter = kmlWriter;
         }
 
-        public void Convert(string gpxPath, string kmlFilename)
+        public void Convert(Configuration configuration)
         {
-            var filenames = Directory.EnumerateFiles(gpxPath);
+            var filenames = Directory.EnumerateFiles(configuration.GpxFolder);
             var folder = new ActivityFolder("Activities");
             var subFolders = new Dictionary<string, ActivityFolder>();
             foreach (var filename in filenames.OrderBy(x => x))
@@ -47,7 +49,7 @@ namespace Runearth.Lib.Service
             {
                 folder.AddItem(subFolders[activityFolderName]);
             }
-            KmlWriter.Write(kmlFilename, folder);
+            KmlWriter.Write(configuration.KmlFilename, folder, configuration);
         }
 
         private string GetMonthId(Activity activity)
@@ -57,6 +59,12 @@ namespace Runearth.Lib.Service
                 return null;
             }
             return activity.StartDateTime.Value.ToString("yyyy-MM", CultureInfo.InvariantCulture);
+        }
+
+        public void Run(string[] args)
+        {
+            var configuration = CommandLineParserService.ParseCommandLine(args);
+            Convert(configuration);
         }
     }
 }

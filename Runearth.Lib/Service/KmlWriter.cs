@@ -9,7 +9,7 @@ namespace Runearth.Lib.Service
 {
     public class KmlWriter : IKmlWriter
     {
-        public void Write(string filename, ActivityFolder folder)
+        public void Write(string filename, ActivityFolder folder, Configuration configuration)
         {
             var document = new XmlDocument();
             document.AddXmlDeclaration("1.0", "UTF-8", null);
@@ -18,19 +18,19 @@ namespace Runearth.Lib.Service
                 .WithXmlns("gx", "http://www.google.com/kml/ext/2.2")
                 .WithXmlns("kml", "http://www.opengis.net/kml/2.2")
                 .WithXmlns("atom", "http://www.w3.org/2005/Atom")
-                .AppendChild(GetFolderNode(document, folder))
+                .AppendChild(GetFolderNode(document, folder, configuration))
                 ;
             document.Save(filename);
         }
 
-        private XmlNode GetFolderNode(XmlDocument document, ActivityFolder folder)
+        private XmlNode GetFolderNode(XmlDocument document, ActivityFolder folder, Configuration configuration)
         {
             var folderNode = document.CreateElement("Folder");
             folderNode.AddSubElement("name").WithText(folder.Name);
             folderNode.AddSubElement("open").WithText("1");
             foreach (var activityFolderItem in folder.Items)
             {
-                var node = GetFolderOrPlacemarkNode(document, activityFolderItem);
+                var node = GetFolderOrPlacemarkNode(document, activityFolderItem, configuration);
                 if (node != null)
                 {
                     folderNode.AppendChild(node);
@@ -39,13 +39,13 @@ namespace Runearth.Lib.Service
             return folderNode;
         }
 
-        private XmlNode GetPlacemarkNode(XmlDocument document, Activity activity)
+        private XmlNode GetPlacemarkNode(XmlDocument document, Activity activity, Configuration configuration)
         {
             var placemarkNode = document.CreateElement("Placemark");
             placemarkNode.AddSubElement("name").WithText(activity.Name);
             var lineStyleNode = placemarkNode.AddSubElement("Style").AddSubElement("LineStyle");
             lineStyleNode.AddSubElement("color").WithText("ff0000ff");
-            lineStyleNode.AddSubElement("width").WithText("5");
+            lineStyleNode.AddSubElement("width").WithText(configuration.KmlLineWidth);
             var lineStringNode = placemarkNode.AddSubElement("LineString");
             lineStringNode.AddSubElement("tessellate").WithText("1");
             lineStringNode.AddSubElement("coordinates").WithText(GetCoordinatesText(activity));
@@ -63,15 +63,15 @@ namespace Runearth.Lib.Service
                 trackPoint.Elevation
             );
 
-        private XmlNode GetFolderOrPlacemarkNode(XmlDocument document, ActivityFolderItem item)
+        private XmlNode GetFolderOrPlacemarkNode(XmlDocument document, ActivityFolderItem item, Configuration configuration)
         {
             switch (item)
             {
                 case Activity activity:
-                    return GetPlacemarkNode(document, activity);
+                    return GetPlacemarkNode(document, activity, configuration);
 
                 case ActivityFolder folder:
-                    return GetFolderNode(document, folder);
+                    return GetFolderNode(document, folder, configuration);
 
                 default:
                     return null;

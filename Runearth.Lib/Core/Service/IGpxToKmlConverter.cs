@@ -1,7 +1,11 @@
-﻿namespace Runearth.Lib.Core.Service
+﻿using Runearth.Lib.DomainModel;
+
+namespace Runearth.Lib.Core.Service
 {
     public interface IGpxToKmlConverter
     {
-        void Convert(string gpxPath, string kmlFilename);
+        void Convert(Configuration configuration);
+
+        void Run(string[] args);
     }
 }
